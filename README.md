@@ -27,6 +27,7 @@ ugt76g1-active-learning/
 ├── CITATION.cff
 ├── environment.yml             # conda environment
 ├── generate_domain.ipynb       # build the combinatorial design space
+├── generate_synthetic_designs.ipynb  # sample LD-BT 3 synthetic designs (constrained mutation)
 ├── execute_simulation.ipynb    # in-silico library-strategy simulation
 ├── execute_production.ipynb    # train/validate the two-stage AL model
 ├── analysis/
@@ -40,6 +41,7 @@ ugt76g1-active-learning/
 │   ├── utils.py                # data loading, WT sequence, round labels, design-space generator
 │   ├── simulations.py          # library-strategy simulation (epPCR / SSM)
 │   ├── motif_functions.py      # candidate-motif contact-filter cascade, sequence logos
+│   ├── synthetic_design.py     # residue-set + constrained-mutation synthetic design (LD-BT 3)
 │   ├── landscape_data.py       # t-SNE embedding + Nadaraya-Watson activity terrain
 │   ├── colormap.py             # SR landscape colormap
 │   ├── rankcorr.py             # descending average-tie rank-correlation
@@ -80,7 +82,7 @@ Availability statement for their deposit location.
 
 ## Active-learning workflow
 
-The campaign runs through three notebooks. Each opens with a **Parameters** cell
+The campaign runs through four notebooks. Each opens with a **Parameters** cell
 holding the published configuration (sizes are derived from inputs, not hardcoded);
 edit that cell and Run All to reproduce or vary a step:
 
@@ -88,6 +90,9 @@ edit that cell and Run All to reproduce or vary a step:
 2. **`execute_simulation.ipynb`** — simulate library-construction strategies (epPCR / SSM) over rounds.
 3. **`execute_production.ipynb`** — train + validate the two-stage model on collected DBTL data
    (place the activity workbook under `data/SrUGT76G1/` — see the notebook's data-requirement note).
+4. **`generate_synthetic_designs.ipynb`** — sample the LD-BT 3 synthetic-design library by
+   constrained mutation of prior-round templates, using the shipped variant library; runs
+   end-to-end without external data.
 
 Launch from the repo root (`jupyter lab` / `jupyter notebook`) so the notebooks
 resolve `src/` and `data/` correctly. Outputs go to `results/`.
