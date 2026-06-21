@@ -1,0 +1,16 @@
+cff-version: 1.2.0
+message: "If you use this software, please cite the associated paper."
+title: "Closed-loop active learning-guided engineering of UDP-glucose transferase enhances rebaudiosides conversion from stevioside"
+authors:
+  - family-names: Kim
+    given-names: Dongjae
+    orcid: "https://orcid.org/0000-0002-4911-5656"
+    affiliation: "Sungkyunkwan University (SKKU)"
+  - family-names: Woo
+    given-names: Han Min
+    orcid: "https://orcid.org/0000-0002-8797-0477"
+    affiliation: "Sungkyunkwan University (SKKU)"
+    email: hmwoo@skku.edu
+license: MIT
+type: software
+# TODO: add DOI, journal, year, and volume once the paper is published.
