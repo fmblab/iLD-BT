@@ -14,9 +14,9 @@ Two methods used by the structural supplementary panels:
     geometry tracks activity (Fig 4f / Extended Data).
 
 Residue sets are enzyme-specific (SrUGT76G1: 7 catalytic + 9 pocket = 57 pairs;
-UGTSL2 differs). Inputs are ESMFold PDB structures and the 6O88 crystal, which are
-deposited on Zenodo (see the manuscript Data Availability statement); they are not
-shipped in this repository.
+UGTSL2 differs). Inputs are ESMFold PDB structures (deposited on Zenodo,
+doi:10.5281/zenodo.20786455) and the 6O88 crystal; they are not shipped in this
+repository.
 
 Figures: structural superposition / RMSD (Fig S50); ESMFold pLDDT and Ca-distance
 panels (Fig S18, S51); the ESM-Partial encoding behind Fig 4, Fig 5, and the

@@ -74,11 +74,13 @@ dataset is small). The variant library is `data/SrUGT76G1_variant_library.xlsx`
 per-variant index crosswalk alongside it; auxiliary prediction/results tables are
 in `data/supplementary/`. See [`data/README.md`](data/README.md) for the schema.
 
+The ESMFold structures used for structural encodings are deposited on Zenodo
+([10.5281/zenodo.20786455](https://doi.org/10.5281/zenodo.20786455)), one PDB per
+unique sequence, named by published variant ID and split into per-prefix archives.
 The per-residue activity workbook used to train the production model
-(`data/SrUGT76G1/training_activity_data.xlsx`) and the ESMFold structures
-used for structural encodings are not redistributed here; see
+(`data/SrUGT76G1/training_activity_data.xlsx`) is not redistributed here; see
 `execute_production.ipynb` for the expected input layout and the manuscript's Data
-Availability statement for their deposit location.
+Availability statement.
 
 ## Active-learning workflow
 
@@ -135,9 +137,11 @@ docstring lists the figures it underlies):
 | `src/al.py` | GP-UCB and DNN Thompson-sampling acquisition | S32–S45, S54–S67 |
 | `src/rankcorr.py` | descending average-tie rank correlation | S14, S19, + AL panels |
 
-These modules document and reproduce the *methods*. Their large inputs — ESMFold
-PDB structures and the cached per-round AL predictions — are deposited on Zenodo
-(see the manuscript Data Availability statement), not shipped in this repository.
+These modules document and reproduce the *methods*. Their large inputs are not
+shipped in this repository: the ESMFold PDB structures are on Zenodo
+([10.5281/zenodo.20786455](https://doi.org/10.5281/zenodo.20786455)), and the
+cached per-round AL predictions are available per the manuscript Data Availability
+statement.
 The TM-align path in `src/structure.py` additionally needs the optional `tmtools`
 package (`pip install tmtools`); the SVD-superposition and Cα-distance paths use
 only biopython / numpy.

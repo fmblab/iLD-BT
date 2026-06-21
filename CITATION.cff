@@ -13,4 +13,13 @@ authors:
     email: hmwoo@skku.edu
 license: MIT
 type: software
-# TODO: add DOI, journal, year, and volume once the paper is published.
+references:
+  - type: dataset
+    title: "ESMFold-predicted structures for active-learning engineering of the glucosyltransferases SrUGT76G1 and UGTSL2"
+    doi: "10.5281/zenodo.20786455"
+    authors:
+      - family-names: Kim
+        given-names: Dongjae
+      - family-names: Woo
+        given-names: Han Min
+# TODO: add the article DOI, journal, year, and volume once the paper is published.
