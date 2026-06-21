@@ -131,7 +131,7 @@ docstring lists the figures it underlies):
 |--------|-----------|-----------------------|
 | `src/motif_functions.py` | WT-contact filter cascade, sequence logos | S2–S8, S15, S52 |
 | `src/landscape_data.py` + `src/colormap.py` | t-SNE embedding + Nadaraya-Watson activity terrain | S13, S16 |
-| `src/structure.py` | ESMFold Cα-distance features; SVD / TM-align superposition | S18, S50, S51 |
+| `src/structure.py` | ESMFold Cα-distance features; SVD / TM-align superposition; Cα-distance vs activity correlation | Fig 4f, Extended Data, S18, S50, S51 |
 | `src/al.py` | GP-UCB and DNN Thompson-sampling acquisition | S32–S45, S54–S67 |
 | `src/rankcorr.py` | descending average-tie rank correlation | S14, S19, + AL panels |
 
@@ -141,6 +141,21 @@ PDB structures and the cached per-round AL predictions — are deposited on Zeno
 The TM-align path in `src/structure.py` additionally needs the optional `tmtools`
 package (`pip install tmtools`); the SVD-superposition and Cα-distance paths use
 only biopython / numpy.
+
+## Upstream data preparation (external)
+
+Two steps in the paper depend on external databases or tools and are run once to
+produce inputs, rather than shipped as runnable pipeline code:
+
+- **Round 0 candidate pool (CAZy GT1).** The starting UGT set is the family GT1
+  enzyme list from the CAZy database; sequences are fetched from NCBI by accession
+  (Biopython `Entrez.efetch`) and length-filtered (442–481 aa). The WT-contact
+  filter cascade that turns this pool into candidate motifs is in
+  `src/motif_functions.py`; the database query / fetch itself is a one-off
+  acquisition step against CAZy + NCBI and is not included here.
+- **Signal-peptide screen (Fig 1d).** Host-genome signal peptides were predicted
+  with **SignalP 6.0** (external tool); this supports the expression-system (eNACT)
+  work and is outside the active-learning pipeline.
 
 ## Nomenclature
 

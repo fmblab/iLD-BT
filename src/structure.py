@@ -8,6 +8,10 @@ Two methods used by the structural supplementary panels:
   * Structure superposition - sequence-anchored SVD superposition RMSD (BLOSUM62
     correspondence) and structure-based TM-align, used to compare an ESMFold model
     against a crystal structure (e.g. SrUGT76G1 6O88) or WT-vs-variant.
+  * Structure-activity correlation - all pairwise Ca-Ca distances per structure
+    (104,653 for a 458-residue model), each correlated (Pearson) with measured
+    activity; pairs above a correlation threshold rank the reference residues whose
+    geometry tracks activity (Fig 4f / Extended Data).
 
 Residue sets are enzyme-specific (SrUGT76G1: 7 catalytic + 9 pocket = 57 pairs;
 UGTSL2 differs). Inputs are ESMFold PDB structures and the 6O88 crystal, which are
@@ -16,10 +20,12 @@ shipped in this repository.
 
 Figures: structural superposition / RMSD (Fig S50); ESMFold pLDDT and Ca-distance
 panels (Fig S18, S51); the ESM-Partial encoding behind Fig 4, Fig 5, and the
-ESM-Partial AL panels (Fig S34, S37, S58, S64).
+ESM-Partial AL panels (Fig S34, S37, S58, S64); the Ca-distance vs activity
+correlation (Fig 4f, Extended Data).
 """
 
 import numpy as np
+import pandas as pd
 
 THREE_TO_ONE = {
     'ALA': 'A', 'ARG': 'R', 'ASN': 'N', 'ASP': 'D', 'CYS': 'C', 'GLN': 'Q',
@@ -80,6 +86,62 @@ def esmpartial_distances(pdb_path, catalytic=CATALYTIC, pocket=POCKET):
     for lo, hi in _within_pairs(catalytic) + _within_pairs(pocket):
         out['res_%d_res_%d_contact' % (hi, lo)] = float(np.linalg.norm(coords[lo] - coords[hi]))
     return out
+
+
+def full_ca_distances(pdb_path, chain='A'):
+    """All pairwise Ca-Ca distances for one structure (lower triangle).
+
+    Returns (labels, distances): labels are 'res_{hi}_res_{lo}_contact' (1-based
+    residue numbers, hi > lo) and distances the matching Angstrom values, one per
+    residue pair. For a 458-residue model this is 458*457/2 = 104,653 pairs -- the
+    full structural feature set behind the Fig 4f / Extended Data correlation.
+    """
+    ca = parse_ca(pdb_path, chain=chain)
+    nums = [rn for rn, _, _ in ca]
+    coords = np.array([xyz for _, _, xyz in ca])
+    d = np.linalg.norm(coords[:, None, :] - coords[None, :, :], axis=-1)
+    rows, cols = np.tril_indices(len(nums), k=-1)
+    labels = ['res_%d_res_%d_contact' % (nums[i], nums[j]) for i, j in zip(rows, cols)]
+    return labels, d[rows, cols].astype(float)
+
+
+def distance_activity_correlations(dist_df, activities, method='pearson'):
+    """Per-pair correlation of Ca-Ca distance with activity.
+
+    dist_df    : variants x pairs DataFrame (columns = labels from full_ca_distances)
+    activities : matching per-variant activity values
+    method     : 'pearson' (default) or any pandas-supported correlation
+
+    Returns a Series of correlation coefficients indexed by pair label, sorted
+    descending. Apply any variant filter (e.g. product-forming only) before calling.
+    """
+    acts = pd.Series(list(activities), index=dist_df.index, dtype=float)
+    r = dist_df.corrwith(acts, method=method)
+    r.name = '%s_r' % method
+    return r.sort_values(ascending=False)
+
+
+def rank_reference_residues(corrs, pos_thresh=0.45, neg_thresh=-0.5):
+    """Rank residues by how often they appear in strongly-correlated distance pairs.
+
+    corrs      : per-pair correlation Series (from distance_activity_correlations)
+    pos_thresh : keep pairs with r above this as positively correlated
+    neg_thresh : keep pairs with r below this as negatively correlated
+
+    Counts the residue numbers in each retained pair label. Returns (pos_counts,
+    neg_counts), each a DataFrame with columns Residue, Count sorted by Count.
+    """
+    import re
+
+    def _counts(selected):
+        nums = []
+        for label in selected.index:
+            nums.extend(re.findall(r'\d+', label))
+        out = pd.Series(nums).value_counts().reset_index()
+        out.columns = ['Residue', 'Count']
+        return out
+
+    return _counts(corrs[corrs > pos_thresh]), _counts(corrs[corrs < neg_thresh])
 
 
 def _parse_ca_seq(pdb_path, chain='A'):
