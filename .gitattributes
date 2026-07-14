@@ -1,0 +1,6 @@
+# Normalize line endings to LF for all text; keep notebooks/data byte-stable.
+* text=auto eol=lf
+*.ipynb text eol=lf
+*.xlsx binary
+*.csv text eol=lf
+*.tsv text eol=lf

@@ -1,0 +1,24 @@
+cff-version: 1.2.0
+message: "If you use this software, please cite the associated paper."
+title: "Closed-loop active learning-guided engineering of UDP-glucose transferase enhances rebaudiosides conversion from stevioside"
+authors:
+  - family-names: Kim
+    given-names: Dongjae
+    orcid: "https://orcid.org/0000-0002-4911-5656"
+    affiliation: "Sungkyunkwan University (SKKU)"
+  - family-names: Woo
+    given-names: Han Min
+    orcid: "https://orcid.org/0000-0002-8797-0477"
+    affiliation: "Sungkyunkwan University (SKKU)"
+    email: hmwoo@skku.edu
+license: GPL-3.0-or-later
+type: software
+references:
+  - type: dataset
+    title: "ESMFold-predicted structures for active-learning engineering of the glucosyltransferases SrUGT76G1 and UGTSL2"
+    doi: "10.5281/zenodo.20786455"
+    authors:
+      - family-names: Kim
+        given-names: Dongjae
+      - family-names: Woo
+        given-names: Han Min
